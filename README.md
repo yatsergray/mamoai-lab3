@@ -26,7 +26,7 @@ To run the code locally or modify it, you will need the following:
 1. Clone the repository:
 
    ```shell
-   git clone https://github.com/Yezhyck/mamoai-lab3.git
+   git clone https://github.com/yatsergray/mamoai-lab3.git
    
 2. Run main.py file:
 
