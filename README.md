@@ -78,6 +78,7 @@ if __name__ == '__main__':
 - As training progresses, the agent **learns to avoid bombs** and **maximize rewards**.
 
 ![Training Performance](/images/graph1.png)
+![Training Performance](/images/grid2.png)
 
 ### Optimal Strategy
 
