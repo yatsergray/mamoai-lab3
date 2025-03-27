@@ -17,6 +17,8 @@ This project explores reinforcement learning (RL) techniques, particularly **Q-l
 - **Stochasticity:**
   - The environment is **partially random**, meaning the agent can sometimes execute an unintended action due to a **slip probability (ε in ε-greedy strategy)**.
 
+![Generated Environment Example](/images/grid1.png)
+
 ## Implementation Details
 
 Google Colab: [Link](https://colab.research.google.com/drive/13ttsI_p37HaKKweeJGrOAQzZ0ZrZuPRU?usp=sharing)
@@ -67,10 +69,6 @@ if __name__ == '__main__':
 ```
 
 ## Results
-
-### Generated Environment Example
-
-![Generated Environment Example](/images/grid1.png)
 
 ### Training Performance
 
