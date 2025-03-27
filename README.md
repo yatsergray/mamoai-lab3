@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
 ## Results
 
-## Generated Environment Example
+### Generated Environment Example
 
 ![Generated Environment Example](/images/grid1.png)
 
