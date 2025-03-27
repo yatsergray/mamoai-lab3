@@ -1,34 +1,116 @@
-# Q-Learning Algorithm Implementation
+# Reinforcement Learning in GridWorld
 
-Intelligent Agent with Q-Learning Algorithm
+## Project Overview
 
-## Description
+This project explores reinforcement learning (RL) techniques, particularly **Q-learning**, in a stochastic environment. The environment consists of **rooms with narrow doorways**, **gold** (reward), and **bombs** (negative reward). The main goal of the agent is to **find the optimal strategy to navigate the environment** while avoiding bombs and maximizing rewards.
 
-This repository contains the code and report for a project on building an intelligent agent using the Q-learning algorithm. The project explores the application of reinforcement learning techniques to train an agent to make intelligent decisions in a given environment.
+## Problem Statement
 
-The project report provides detailed information about the work done, including the problem statement, methodology, experimental setup, results, and conclusions. You can access the report through the following link:
+- **Environment Type:** Grid-based world with obstacles, rewards, and stochasticity.
+- **Grid Size:** 17x17 (scalable).
+- **State Types:**
+  - **Passage:** -1 reward (movement cost).
+  - **Wall:** 0 reward (impassable).
+  - **Terminal States:**
+    - **Gold:** +50 or +25 reward.
+    - **Bomb:** -50 penalty.
+- **Stochasticity:**
+  - The environment is **partially random**, meaning the agent can sometimes execute an unintended action due to a **slip probability (ε in ε-greedy strategy)**.
 
-[Project Report](https://docs.google.com/document/d/1sYFQBakhxS6Vx5OsmFN0CFlOECE_UAaXbUPzZhqgJZ4/edit?usp=sharing)
+## Implementation Details
 
-The code for the Q-learning algorithm implementation can be found in the Google Colab notebook provided. The notebook provides a step-by-step implementation of the algorithm and can be accessed using the following link:
+Google Colab: [Link](https://colab.research.google.com/drive/13ttsI_p37HaKKweeJGrOAQzZ0ZrZuPRU?usp=sharing)
 
-[Q-Learning Algorithm Code](https://colab.research.google.com/drive/13ttsI_p37HaKKweeJGrOAQzZ0ZrZuPRU?usp=sharing)
+- **Algorithm:** Q-learning.
+- **Learning Type:** Online learning — Q-table values are updated dynamically after each action.
+- **Exploration Strategy:** ε-greedy policy:
+  - With probability ε, the agent takes a **random** action.
+  - With probability **1 - ε**, the agent follows the **best** known action from the Q-table.
 
-## Requirements
+## Code Overview
 
-To run the code locally or modify it, you will need the following:
+```python
+import pandas as pd
 
-- Python (version 3.10)
-- Additional libraries or packages (numpy, matplotlib and pandas)
+from classes.Agent import Agent
+from classes.Converter import Converter
+from classes.GridWorld import GridWorld
+from classes.QLearning import QLearning
 
-## Usage
+def run():
+    g = GridWorld(room_depth=3, room_width=3, rooms_number_in_depth=4, rooms_number_in_width=4)
+    g.build()
+    g.put_gold(gold_number=1)
+    g.put_gold(25, 2)
+    g.put_bombs(bombs_number=15)
+    print(pd.DataFrame(g.grid))
+    
+    a = Agent(g)
+    q = QLearning(a)
+    c = Converter(g)
+    
+    rewards_per_episode = q.learn(episodes_number=10000)
+    print(rewards_per_episode)
+    
+    print("Learning is finished!")
+    
+    first_path = q.get_shortest_path()
+    second_path = q.get_shortest_path()
+    third_path = q.get_shortest_path()
+    
+    print(first_path)
+    print(second_path)
+    print(third_path)
+    
+    c.convert_grid_into_plot(first_path)
+    c.convert_grid_into_plot(second_path)
+    c.convert_grid_into_plot(third_path)
+    
+    c.convert_learning_data_into_plot(rewards_per_episode)
 
-1. Clone the repository:
+if __name__ == '__main__':
+    run()
+```
 
-   ```shell
-   git clone https://github.com/Yezhyck/mamoai-lab3.git
-   
-2. Run main.py file:
+## Results
 
-   ```shell
-   python main.py
+## Generated Environment Example
+
+![Generated Environment Example](/images/grid1.png)
+
+### Training Performance
+
+- The **total reward per episode** fluctuates, indicating both successful gold retrieval and bomb encounters.
+- As training progresses, the agent **learns to avoid bombs** and **maximize rewards**.
+
+![Training Performance](/images/graph1.png)
+
+### Optimal Strategy
+
+- The **final learned policy** directs the agent toward **high-reward gold (50 points)**.
+- The strategy is **optimal** as the environment follows **Markov Decision Process (MDP) properties**.
+- Training was conducted with **10,000 episodes** at a **low slip probability (0.1)**.
+
+![Optimal Strategy](/images/grid3.png)
+
+## Effect of Slip Probability
+
+- **High slip probability (ε = 1.0):** The agent moves randomly, leading to many **negative rewards**.
+- **Moderate slip probability (ε = 0.5):** Some randomness, but the agent can still find **optimal paths**.
+- **Low slip probability (ε = 0.01):** The agent **rarely deviates** from the best path but may **miss better rewards**.
+
+![Plots Comparison](/images/general.png)
+
+## Conclusion
+
+- **Q-learning is effective** in training an agent to navigate a stochastic environment.
+- **Exploration-exploitation balance** (ε-greedy strategy) significantly impacts performance.
+- **Optimized policy ensures** the agent finds the **best reward** while avoiding obstacles.
+
+## Future Work
+
+- Implement **deep Q-learning** (DQN) for large state spaces.
+- Introduce **dynamic obstacles** for added complexity.
+- Extend to **multi-agent RL** scenarios.
+
+---
